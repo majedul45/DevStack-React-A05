@@ -17,6 +17,12 @@ export default function Technologies() {
     setStack(current => [...current, technology]);
   };
 
+  const removeFromStack = (technology) => {
+    setStack(current => current.filter(item => item.id !== technology.id));
+  };
+
+  const removeAll = () => setStack([]);
+
   return (
     <section id="technologies" className="technology-section container">
       <div className="section-heading">
@@ -26,15 +32,10 @@ export default function Technologies() {
       <div className="technology-layout">
         <div className="tech-grid">
           {items.map(tech => (
-            <TechnologyCard
-              key={tech.id}
-              tech={tech}
-              selected={stack.some(item => item.id === tech.id)}
-              onAdd={addToStack}
-            />
+            <TechnologyCard key={tech.id} tech={tech} selected={stack.some(item => item.id === tech.id)} onAdd={addToStack} />
           ))}
         </div>
-        <StackPanel stack={stack} onRemove={() => {}} onRemoveAll={() => {}} />
+        <StackPanel stack={stack} onRemove={removeFromStack} onRemoveAll={removeAll} />
       </div>
     </section>
   );
