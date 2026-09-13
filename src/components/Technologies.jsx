@@ -4,12 +4,18 @@ import StackPanel from "./StackPanel";
 
 export default function Technologies() {
   const [items, setItems] = useState([]);
+  const [stack, setStack] = useState([]);
 
   useEffect(() => {
     fetch("/src/data/technologies.json")
       .then(response => response.json())
       .then(data => setItems(data));
   }, []);
+
+  const addToStack = (technology) => {
+    if (stack.some(item => item.id === technology.id)) return;
+    setStack(current => [...current, technology]);
+  };
 
   return (
     <section id="technologies" className="technology-section container">
@@ -20,10 +26,15 @@ export default function Technologies() {
       <div className="technology-layout">
         <div className="tech-grid">
           {items.map(tech => (
-            <TechnologyCard key={tech.id} tech={tech} selected={false} onAdd={() => {}} />
+            <TechnologyCard
+              key={tech.id}
+              tech={tech}
+              selected={stack.some(item => item.id === tech.id)}
+              onAdd={addToStack}
+            />
           ))}
         </div>
-        <StackPanel />
+        <StackPanel stack={stack} onRemove={() => {}} onRemoveAll={() => {}} />
       </div>
     </section>
   );
